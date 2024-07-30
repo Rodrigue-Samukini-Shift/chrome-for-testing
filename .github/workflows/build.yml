@@ -30,7 +30,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install dependencies
-        run: zip scan-files.zip .
+        run: zip -r scan-files.zip .
         shell: bash
       - name: Archive zip file
         uses: actions/upload-artifact@v4
