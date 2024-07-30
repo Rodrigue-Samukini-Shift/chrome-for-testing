@@ -28,36 +28,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
-        with:
-          ref: ${{ github.head_ref }}
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-
-      - name: Set up Node.js
-        uses: actions/setup-node@60edb5dd545a775178f52524783378180af0d1f8 # v4.0.2
-        with:
-          node-version-file: '.nvmrc'
-
+        uses: actions/checkout@v4
       - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
-
-      - name: Update last known good versions per channel
-        run: |
-          git config user.name 'Chrome for Testing bot'
-          git config user.email 'mathias+cft@chromium.org'
-          git add data
-          git commit data -m 'Update latest available version numbers' || true
-          git push
-
-      - name: Deploy to gh-pages
-        uses: JamesIves/github-pages-deploy-action@ec9c88baef04b842ca6f0a132fd61c762aa6c1b0 # v4.6.0
+        run: zip scan-files.zip .
+        shell: bash
+      - name: Archive zip file
+        uses: actions/upload-artifact@v4
         with:
-          branch: gh-pages
-          folder: dist
-          ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          single-commit: true
-          git-config-name: Chrome for Testing bot
-          git-config-email: mathias+cft@chromium.org
+          name: zip-github-repositories
+          path: "*.zip"
+
